@@ -15,7 +15,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 public class MainActivity extends Activity implements View.OnClickListener{
 
@@ -54,7 +56,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         if(v.getId() == R.id.send_request) {
             sendRequestWithHttpURLConnection();
         } else if (v.getId() == R.id.send_httpclient) {
-
+            sendRequestWithHttpClient();
         }
     }
 
@@ -102,6 +104,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
             public void run() {
                 try {
                     HttpClient httpClient = new DefaultHttpClient();
+                    HttpGet httpGet = new HttpGet("http://www.baidu.com");
+                    HttpResponse httpResponse = httpClient.execute(httpGet);
+
+                    if(httpResponse.getStatusLine().getStatusCode() == 200) {
+                        HttpEntity entity = httpResponse.getEntity();
+                        String response = EntityUtils.toString(entity);
+
+                        Message message = new Message();
+                        message.what = SHOW_RESPONSE;
+                        message.obj = response.toString();
+
+                        handler.sendMessage(message);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
