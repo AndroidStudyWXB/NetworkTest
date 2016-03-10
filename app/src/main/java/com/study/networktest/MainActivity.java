@@ -13,12 +13,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import org.apache.http.*;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 public class MainActivity extends Activity implements View.OnClickListener{
 
     public static final int SHOW_RESPONSE = 0;
 
     private Button sendRequest;
+    private Button sendHttpClient;
     private TextView reponseText;
 
     private Handler handler = new Handler() {
@@ -38,15 +42,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_main);
 
         sendRequest = (Button) findViewById(R.id.send_request);
+        sendHttpClient = (Button) findViewById(R.id.send_httpclient);
         reponseText = (TextView) findViewById(R.id.reponse_text);
 
         sendRequest.setOnClickListener(this);
+        sendHttpClient.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.send_request) {
             sendRequestWithHttpURLConnection();
+        } else if (v.getId() == R.id.send_httpclient) {
+
         }
     }
 
@@ -83,6 +91,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
                     if(connection != null) {
                         connection.disconnect();
                     }
+                }
+            }
+        }).start();
+    }
+
+    private void sendRequestWithHttpClient() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HttpClient httpClient = new DefaultHttpClient();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }).start();
